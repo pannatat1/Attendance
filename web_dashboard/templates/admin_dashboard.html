@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="dashboard-header">
+    <h2>Admin – Attendance Records</h2>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+</div>
+
+<form method="get" action="{{ url_for('admin_dashboard') }}" class="admin-select">
+    <label for="teacher">Select Teacher:</label>
+
+    <select name="teacher_id" id="teacher" onchange="this.form.submit()">
+        <option value="">-- Choose --</option>
+
+        {% for teacher in teachers %}
+            <option
+                value="{{ teacher['teacher_id'] }}"
+                {% if teacher['teacher_id'] | string == selected_teacher %}selected{% endif %}
+            >
+                {{ teacher['username'] }}
+            </option>
+        {% endfor %}
+
+    </select>
+</form>
+
+{% if selected_teacher %}
+<hr>
+
+<h3>Attendance Records</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Period</th>
+            <th>Subject</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Grade Level</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record['class_date'] }}</td>
+            <td>{{ record['class_time'] }}</td>
+            <td>{{ record['class_period'] }}</td>
+            <td>{{ record['class_subject'] }}</td>
+            <td>{{ record['student_id'] }}</td>
+            <td>{{ record['full_name'] }}</td>
+            <td>{{ record['grade_level'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STS Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="login-page">
+
+<div class="login-container">
+    <h2>Attendance System Login</h2>
+
+    <form action="{{ url_for('login') }}" method="post">
+
+        <!-- ROLE -->
+        <label>Role</label>
+        <select name="role" id="role" required onchange="toggleUserOptions()">
+            <option value="Teacher">Teacher</option>
+            <option value="Admin">Admin</option>
+        </select>
+
+        <!-- NAME -->
+        <label>Name</label>
+        <select name="email" id="userSelect" required>
+            <option value="">-- Select Teacher --</option>
+            {% for teacher in teachers %}
+                <option value="{{ teacher }}">
+                    {{ teacher }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- PASSWORD -->
+        <label>Password</label>
+        <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter password"
+            required
+        >
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="note" id="noteText">
+        Teacher password = teacher name in lowercase
+    </p>
+</div>
+
+<script>
+function toggleUserOptions() {
+    const role = document.getElementById("role").value;
+    const userSelect = document.getElementById("userSelect");
+    const password = document.getElementById("password");
+    const noteText = document.getElementById("noteText");
+
+    password.value = "";
+
+    if (role === "Admin") {
+        userSelect.innerHTML = "";
+        const opt = document.createElement("option");
+        opt.value = "Admin";
+        opt.text = "Admin";
+        userSelect.appendChild(opt);
+
+        noteText.innerText = "Admin password = admin";
+    } else {
+        userSelect.innerHTML = `
+            <option value="">-- Select Teacher --</option>
+            {% for teacher in teachers %}
+                <option value="{{ teacher }}">
+                    {{ teacher }}
+                </option>
+            {% endfor %}
+        `;
+        noteText.innerText = "Teacher password = teacher name in lowercase";
+    }
+}
+</script>
+
+</body>
+</html>
